@@ -1103,12 +1103,6 @@ function bindEvents() {
     const colorArea = event.target.closest(".color-picker-wrap, [data-color-input]");
     if (colorArea) {
       event.stopPropagation();
-
-      const colorButton = event.target.closest('[data-action="color"]');
-      if (colorButton) {
-        chooseColor(colorButton.dataset.id);
-      }
-
       return;
     }
 
@@ -1127,17 +1121,14 @@ function bindEvents() {
     if (action === "reset") resetPresenter(id);
     if (action === "delete") deletePresenter(id);
     if (action === "edit") openEditDialog(id);
-    if (action === "color") chooseColor(id);
   });
 
 
   // color picker bubbling guard
-  ["pointerdown", "touchstart"].forEach(eventName => {
-    els.timerGrid.addEventListener(eventName, event => {
-      if (event.target.closest(".color-picker-wrap, [data-color-input]")) {
-        event.stopPropagation();
-      }
-    }, { passive: true });
+  els.timerGrid.addEventListener("pointerdown", event => {
+    if (event.target.closest(".color-picker-wrap, [data-color-input]")) {
+      event.stopPropagation();
+    }
   });
 
   els.timerGrid.addEventListener("input", event => {

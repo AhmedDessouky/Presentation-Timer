@@ -102,3 +102,7 @@ Open `index.html` in your browser.
 ## Latest update
 
 - Fixed color picker clicks bubbling into timer-card clicks, preventing accidental timer toggles when changing color.
+
+## Latest update
+
+- Made the color picker Safari-safe by placing the real color input directly over the color icon instead of opening it through JavaScript.
