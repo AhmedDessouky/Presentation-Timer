@@ -94,3 +94,7 @@ Open `index.html` in your browser.
 ## Latest fix
 
 - Cache-busted the CSS link and added a small footer style fallback so GitHub Pages/Safari loads the correct footer styling.
+
+## Latest update
+
+- Added a custom timer/stopwatch favicon for the browser tab.
