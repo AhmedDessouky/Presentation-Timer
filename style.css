@@ -628,31 +628,12 @@ body.light-mode .progress-wrap {
   flex: 1;
 }
 
-.color-picker-wrap {
-  position: relative;
-  display: inline-flex;
-  width: 35px;
-  height: 35px;
-}
-
-.color-picker-wrap .icon-btn {
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
 .hidden-color-input {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.01;
-  cursor: pointer;
-  border: 0;
-  padding: 0;
-  border-radius: 12px;
-  appearance: none;
-  -webkit-appearance: none;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .empty-state {
@@ -990,8 +971,7 @@ body.light-mode .over {
     gap: 6px;
   }
 
-  .icon-btn,
-  .color-picker-wrap {
+  .icon-btn {
     width: 42px;
     height: 42px;
     border-radius: 14px;
@@ -1153,12 +1133,38 @@ body.light-mode .over {
     justify-content: space-between;
   }
 
-  .icon-btn,
-  .color-picker-wrap {
+  .icon-btn {
     flex: 1;
   }
+}
 
-  .color-picker-wrap .icon-btn {
-    width: 100%;
-  }
+
+/* Light mode contrast fix for primary action buttons */
+body.light-mode .btn.primary,
+body.light-mode .mode-tab.active,
+body.light-mode .mobile-live-btn.primary {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #6657ff, #00a3b5) !important;
+  border-color: transparent !important;
+  box-shadow: 0 10px 26px rgba(102, 87, 255, 0.22);
+}
+
+body.light-mode .btn.primary:hover,
+body.light-mode .mode-tab.active:hover,
+body.light-mode .mobile-live-btn.primary:hover {
+  filter: brightness(1.03);
+}
+
+body.light-mode .main-sequence-bar .btn.primary,
+body.light-mode #addPresenterBtn,
+body.light-mode #sideNextSpeakerBtn,
+body.light-mode #mainNextSpeakerBtn {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #6657ff, #00a3b5) !important;
+  border-color: transparent !important;
+}
+
+body.light-mode .btn.success {
+  background: rgba(18, 183, 106, 0.16);
+  border-color: rgba(18, 183, 106, 0.32);
 }

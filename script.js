@@ -347,6 +347,10 @@ function addPresenter() {
 }
 
 function setMode(mode) {
+  if (mode === "sequence" && blockSequenceIfDuplicateNames()) {
+    return;
+  }
+
   state.mode = mode;
   pauseAllPresenters();
 
@@ -367,7 +371,38 @@ function setMode(mode) {
   renderAll(true);
 }
 
+
+function getDuplicatePresenterNames() {
+  const counts = {};
+  state.presenters.forEach(p => {
+    const key = p.name.trim().toLowerCase();
+    if (!key) return;
+    counts[key] = (counts[key] || 0) + 1;
+  });
+
+  return Object.keys(counts)
+    .filter(key => counts[key] > 1)
+    .map(key => state.presenters.find(p => p.name.trim().toLowerCase() === key).name);
+}
+
+function blockSequenceIfDuplicateNames() {
+  const duplicates = getDuplicatePresenterNames();
+  if (!duplicates.length) return false;
+
+  alert(
+    "Sequence mode cannot run because more than one timer/stopwatch has the same presenter name:\n\n" +
+    duplicates.join(", ") +
+    "\n\nPlease rename or remove duplicate presenter timers before using sequence mode."
+  );
+
+  return true;
+}
+
 function loadSequence() {
+  if (blockSequenceIfDuplicateNames()) {
+    return;
+  }
+
   const rawNames = els.sequenceInput.value
     .split("\n")
     .map(x => x.trim())
@@ -394,6 +429,10 @@ function loadSequence() {
 }
 
 function nextSpeaker() {
+  if (blockSequenceIfDuplicateNames()) {
+    return;
+  }
+
   if (state.mode !== "sequence") {
     setMode("sequence");
   }
@@ -550,13 +589,11 @@ function renderPresenterCards(force = false) {
       <div class="card-head">
         <h3>${escapeHtml(p.name)}</h3>
         <div class="card-buttons">
-          <label class="color-picker-wrap" title="Change color">
-            <span class="icon-btn color">🎨</span>
-            <input class="hidden-color-input" type="color" value="${color}" data-color-input="${p.id}" aria-label="Change ${escapeHtml(p.name)} color" />
-          </label>
+          <button class="icon-btn color" title="Change color" data-action="color" data-id="${p.id}">🎨</button>
           <button class="icon-btn edit" title="Edit" data-action="edit" data-id="${p.id}">✎</button>
           <button class="icon-btn" title="Reset" data-action="reset" data-id="${p.id}">↺</button>
           <button class="icon-btn" title="Delete" data-action="delete" data-id="${p.id}">×</button>
+          <input class="hidden-color-input" type="color" value="${color}" data-color-input="${p.id}" />
         </div>
       </div>
 
@@ -838,14 +875,7 @@ function updateColor(id, color) {
   if (!presenter) return;
 
   presenter.color = color;
-
-  const card = document.querySelector(`.timer-card[data-id="${id}"]`);
-  if (card) {
-    card.style.setProperty("--timer-color", color);
-  }
-
   save();
-  lastPresenterSignature = "";
   renderAll(true);
 }
 
@@ -1041,15 +1071,10 @@ function bindEvents() {
     if (action === "reset") resetPresenter(id);
     if (action === "delete") deletePresenter(id);
     if (action === "edit") openEditDialog(id);
+    if (action === "color") chooseColor(id);
   });
 
   els.timerGrid.addEventListener("input", event => {
-    const input = event.target.closest("[data-color-input]");
-    if (!input) return;
-    updateColor(input.dataset.colorInput, input.value);
-  });
-
-  els.timerGrid.addEventListener("change", event => {
     const input = event.target.closest("[data-color-input]");
     if (!input) return;
     updateColor(input.dataset.colorInput, input.value);

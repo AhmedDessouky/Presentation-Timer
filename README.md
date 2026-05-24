@@ -59,6 +59,14 @@ Open `index.html` in your browser.
 - Presenter cards become full-width with larger tap targets.
 - Header, controls, and pop-ups are adjusted for smaller screens.
 
-## Latest fix
+## Latest small update
 
-- Fixed mobile color picker behavior for timer/stopwatch cards.
+- Renamed `Danger Zone` to `Reset Options` for clearer wording.
+
+## Latest update
+
+- Sequence mode now blocks duplicate presenter names to avoid ambiguity when selecting the next speaker.
+
+## Latest update
+
+- Fixed light mode contrast for Add Presenter and Next Speaker primary buttons.
