@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presentation Timer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="title-block">
+        <h1>Presentation Timer</h1>
+        <p>Keep every speaker on track with smart timing, live control, and clear presentation flow.</p>
+      </div>
+      <div class="top-actions">
+        <button class="btn theme-toggle" id="themeToggleBtn">Light Mode</button>
+        <div class="pill">
+          <span class="dot"></span>
+          <span id="savedStatus">Saved locally</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <section class="panel compact-total-settings">
+          <h2>Total Timer Settings</h2>
+          <select id="totalType">
+            <option value="stopwatch">Total Stopwatch</option>
+            <option value="timer">Total Timer</option>
+          </select>
+
+          <label>Total time</label>
+          <div class="time-input-row">
+            <div>
+              <input id="totalMinutes" type="number" min="0" value="20" />
+              <small>Minutes</small>
+            </div>
+            <div>
+              <input id="totalSeconds" type="number" min="0" max="59" value="0" />
+              <small>Seconds</small>
+            </div>
+          </div>
+
+          <label class="check-row">
+            <input id="soundEnabled" type="checkbox" checked />
+            <span>Play tone when any timer runs out</span>
+          </label>
+
+          <div class="button-row">
+            <button class="btn" id="testSoundBtn">Test Tone</button>
+            <button class="btn" id="resetTotalBtn">Reset Total</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Mode</h2>
+          <div class="mode-tabs">
+            <button class="mode-tab active" data-mode="manual">Manual</button>
+            <button class="mode-tab" data-mode="semi">Semi Auto</button>
+            <button class="mode-tab" data-mode="sequence">Sequence</button>
+          </div>
+          <p class="hint" id="modeHint">
+            Manual: start and pause any presenter yourself.
+          </p>
+        </section>
+
+        <section class="panel">
+          <h2>Add Presenter</h2>
+          <label for="presenterName">Presenter name</label>
+          <input id="presenterName" type="text" placeholder="Example: Ahmed" />
+
+          <label for="presenterType">Type</label>
+          <select id="presenterType">
+            <option value="stopwatch">Stopwatch</option>
+            <option value="timer">Timer</option>
+          </select>
+
+          <label id="presenterDurationLabel">Target time</label>
+          <div class="time-input-row">
+            <div>
+              <input id="presenterMinutes" type="number" min="0" value="5" />
+              <small>Minutes</small>
+            </div>
+            <div>
+              <input id="presenterSeconds" type="number" min="0" max="59" value="0" />
+              <small>Seconds</small>
+            </div>
+          </div>
+
+          <button class="btn primary full" id="addPresenterBtn">Add Presenter</button>
+        </section>
+
+        <section class="panel sequence-panel">
+          <h2>Sequence Setup</h2>
+          <label for="sequenceInput">Speaking order</label>
+          <textarea id="sequenceInput" placeholder="Write one presenter name per line. You can repeat the same name more than once.&#10;&#10;Example:&#10;Ahmed&#10;Amr&#10;Ahmed&#10;Laila"></textarea>
+          <div class="button-row">
+            <button class="btn full" id="loadSequenceBtn">Load Sequence</button>
+            <button class="btn primary full" id="sideNextSpeakerBtn">Next Speaker</button>
+          </div>
+          <div class="sequence-status" id="sequenceStatus">No sequence loaded.</div>
+        </section>
+
+        <section class="panel">
+          <h2>Danger Zone</h2>
+          <div class="button-row">
+            <button class="btn danger" id="resetAllBtn">Reset All</button>
+            <button class="btn danger" id="clearPresentersBtn">Clear Presenters</button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="content">
+        <section class="total-card">
+          <div>
+            <p class="eyebrow">Total Presentation Time</p>
+            <div class="total-time" id="totalDisplay">00:00.0</div>
+            <p class="hint">Auto-starts when any presenter starts. Pausing total pauses all presenter timers.</p>
+          </div>
+          <div class="total-actions">
+            <span class="status" id="totalStatus">Paused</span>
+            <button class="btn" id="editTotalBtn">✎ Edit Total</button>
+            <button class="btn" id="pauseTotalBtn">Pause Total</button>
+            <button class="btn success" id="startTotalBtn">Start Total</button>
+          </div>
+        </section>
+
+        <section class="main-sequence-bar" id="mainSequenceBar">
+          <div>
+            <p class="eyebrow">Sequence Control</p>
+            <h2 id="mainSequenceTitle">Ready for sequence mode</h2>
+            <p id="mainSequenceText">Load your speaking order, then press Next Speaker here during the presentation.</p>
+          </div>
+          <button class="btn primary big" id="mainNextSpeakerBtn">Next Speaker</button>
+        </section>
+
+        <section class="toolbar">
+          <div>
+            <h2>Presenters</h2>
+            <p id="presenterCount">0 presenters added</p>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn" id="summaryBtn">Summary</button>
+            <button class="btn" id="pausePresentersBtn">Pause Presenters</button>
+          </div>
+        </section>
+
+        <section id="timerGrid" class="timer-grid"></section>
+        <section id="emptyState" class="empty-state">
+          <h3>No presenters yet</h3>
+          <p>Add presenters from the left panel to begin timing your presentation.</p>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="summaryDialog" class="summary-dialog">
+    <div class="summary-head">
+      <div>
+        <p class="eyebrow">Presentation Summary</p>
+        <h2>Presenter Timing Breakdown</h2>
+      </div>
+      <button class="icon-btn" id="closeSummaryBtn">×</button>
+    </div>
+
+    <div id="summaryContent" class="summary-content"></div>
+
+    <div class="summary-footer">
+      <button class="btn" id="copySummaryBtn">Copy Summary</button>
+      <button class="btn primary" id="closeSummaryFooterBtn">Done</button>
+    </div>
+  </dialog>
+
+  <dialog id="editDialog" class="summary-dialog edit-dialog">
+    <div class="summary-head">
+      <div>
+        <p class="eyebrow">Edit Timer</p>
+        <h2 id="editTitle">Edit elapsed time</h2>
+      </div>
+      <button class="icon-btn" id="closeEditBtn">×</button>
+    </div>
+
+    <div class="summary-content">
+      <label>Elapsed time</label>
+      <div class="time-input-row">
+        <div>
+          <input id="editMinutes" type="number" min="0" value="0" />
+          <small>Minutes</small>
+        </div>
+        <div>
+          <input id="editSeconds" type="number" min="0" max="59" value="0" />
+          <small>Seconds</small>
+        </div>
+      </div>
+
+      <label id="editDurationLabel">Target time</label>
+      <div class="time-input-row">
+        <div>
+          <input id="editTargetMinutes" type="number" min="0" value="5" />
+          <small>Minutes</small>
+        </div>
+        <div>
+          <input id="editTargetSeconds" type="number" min="0" max="59" value="0" />
+          <small>Seconds</small>
+        </div>
+      </div>
+
+      <p class="hint">Editing elapsed time also adjusts the total timer by the same difference.</p>
+    </div>
+
+    <div class="summary-footer">
+      <button class="btn" id="cancelEditBtn">Cancel</button>
+      <button class="btn primary" id="saveEditBtn">Save Changes</button>
+    </div>
+  </dialog>
+
+  <dialog id="editTotalDialog" class="summary-dialog edit-dialog">
+    <div class="summary-head">
+      <div>
+        <p class="eyebrow">Edit Total Timer</p>
+        <h2>Edit displayed total time</h2>
+      </div>
+      <button class="icon-btn" id="closeEditTotalBtn">×</button>
+    </div>
+
+    <div class="summary-content">
+      <label id="editTotalLabel">Displayed total time</label>
+      <div class="time-input-row">
+        <div>
+          <input id="editTotalMinutes" type="number" min="0" value="0" />
+          <small>Minutes</small>
+        </div>
+        <div>
+          <input id="editTotalSeconds" type="number" min="0" max="59" value="0" />
+          <small>Seconds</small>
+        </div>
+      </div>
+      <p class="hint">This only changes the displayed total timer value. It does not change the total timer setup length.</p>
+    </div>
+
+    <div class="summary-footer">
+      <button class="btn" id="cancelEditTotalBtn">Cancel</button>
+      <button class="btn primary" id="saveEditTotalBtn">Save Total</button>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>

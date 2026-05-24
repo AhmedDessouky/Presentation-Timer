@@ -1,0 +1,52 @@
+# Presentation Timer
+
+A ready-to-host GitHub Pages webpage for timing presentations.
+
+## Features
+
+- Add unlimited presenter stopwatches or timers
+- Name each timer after the presenter
+- Separate total presentation stopwatch or timer
+- Total presentation time auto-starts when any presenter starts
+- Pausing the total timer pauses all presenter timers
+- Manual mode
+- Semi-auto mode
+- Sequence mode with repeated presenter names allowed
+- Sequence mode stops the total timer when the sequence ends
+- Sequence `Next Speaker` button appears above the presenter cards
+- Optional tone when any countdown timer reaches zero
+- Stopwatch target time controls the progress bar and summary saved/over calculation
+- Time inputs support minutes and seconds
+- Edit button on every presenter timer to manually change elapsed time and target/timer length
+- Editing a presenter's elapsed time also adjusts the total timer by the same difference
+- Color button on every presenter timer to customize its card/progress color
+- Edit button for the total timer to manually change its displayed value
+- Light mode / dark mode toggle
+- Improved click responsiveness by preventing full card rebuilds every frame
+- Summary pop-up showing:
+  - how long each presenter talked
+  - their target time
+  - how much time they saved or went over by
+- Local browser saving using `localStorage`
+- No backend, no installation, no build step
+
+## How to run locally
+
+Open `index.html` in your browser.
+
+## How to host on GitHub Pages
+
+1. Create a new GitHub repository.
+2. Upload these files:
+   - `index.html`
+   - `style.css`
+   - `script.js`
+   - `README.md`
+3. Go to repository `Settings`.
+4. Open `Pages`.
+5. Under `Build and deployment`, choose:
+   - Source: `Deploy from a branch`
+   - Branch: `main`
+   - Folder: `/root`
+6. Press `Save`.
+7. Wait a minute, then open the GitHub Pages link.
