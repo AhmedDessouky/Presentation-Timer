@@ -90,3 +90,7 @@ Open `index.html` in your browser.
 ## Latest update
 
 - Added footer collaboration credit for Ahmed El Dessouky and Jana Khaled.
+
+## Latest fix
+
+- Cache-busted the CSS link and added a small footer style fallback so GitHub Pages/Safari loads the correct footer styling.

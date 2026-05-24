@@ -4,7 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Presentation Timer</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=footer-fix-2" />
+  <style id="footer-fix-inline-style">
+    .site-footer {
+      margin-top: 22px;
+      padding: 16px 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: 0.01em;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      backdrop-filter: blur(18px);
+    }
+
+    body.light-mode .site-footer {
+      background: rgba(255, 255, 255, 0.72);
+    }
+  </style>
+
 </head>
 <body>
   <div class="app">
