@@ -1,4 +1,5 @@
 # Presentation Timer
+Developed in collaboration with Jana Khaled
 
 A ready-to-host GitHub Pages webpage for timing presentations.
 
