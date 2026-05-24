@@ -98,3 +98,7 @@ Open `index.html` in your browser.
 ## Latest update
 
 - Added a custom timer/stopwatch favicon for the browser tab.
+
+## Latest update
+
+- Fixed color picker clicks bubbling into timer-card clicks, preventing accidental timer toggles when changing color.

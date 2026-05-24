@@ -1100,6 +1100,18 @@ function bindEvents() {
   els.saveEditTotalBtn.addEventListener("click", saveEditTotalDialog);
 
   els.timerGrid.addEventListener("click", event => {
+    const colorArea = event.target.closest(".color-picker-wrap, [data-color-input]");
+    if (colorArea) {
+      event.stopPropagation();
+
+      const colorButton = event.target.closest('[data-action="color"]');
+      if (colorButton) {
+        chooseColor(colorButton.dataset.id);
+      }
+
+      return;
+    }
+
     const button = event.target.closest("button");
     if (!button) {
       const card = event.target.closest(".timer-card");
@@ -1116,6 +1128,16 @@ function bindEvents() {
     if (action === "delete") deletePresenter(id);
     if (action === "edit") openEditDialog(id);
     if (action === "color") chooseColor(id);
+  });
+
+
+  // color picker bubbling guard
+  ["pointerdown", "touchstart"].forEach(eventName => {
+    els.timerGrid.addEventListener(eventName, event => {
+      if (event.target.closest(".color-picker-wrap, [data-color-input]")) {
+        event.stopPropagation();
+      }
+    }, { passive: true });
   });
 
   els.timerGrid.addEventListener("input", event => {
