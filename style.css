@@ -1249,3 +1249,22 @@ body.light-mode .btn.success {
 body.light-mode .timer-card {
   border-color: color-mix(in srgb, var(--timer-color) 50%, rgba(16, 24, 40, 0.12)) !important;
 }
+
+
+.site-footer {
+  margin-top: 22px;
+  padding: 16px 18px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  backdrop-filter: blur(18px);
+}
+
+body.light-mode .site-footer {
+  background: rgba(255, 255, 255, 0.72);
+}

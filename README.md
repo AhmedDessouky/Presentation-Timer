@@ -86,3 +86,7 @@ Open `index.html` in your browser.
 ## Latest update
 
 - The sequence auto-reset option now resets the total timer as well as all presenter timers.
+
+## Latest update
+
+- Added footer collaboration credit for Ahmed El Dessouky and Jana Khaled.
