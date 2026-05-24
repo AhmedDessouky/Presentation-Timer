@@ -58,3 +58,7 @@ Open `index.html` in your browser.
 - A bottom live-control bar appears for Pause, Next, and Summary.
 - Presenter cards become full-width with larger tap targets.
 - Header, controls, and pop-ups are adjusted for smaller screens.
+
+## Latest fix
+
+- Fixed mobile color picker behavior for timer/stopwatch cards.

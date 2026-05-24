@@ -628,12 +628,31 @@ body.light-mode .progress-wrap {
   flex: 1;
 }
 
+.color-picker-wrap {
+  position: relative;
+  display: inline-flex;
+  width: 35px;
+  height: 35px;
+}
+
+.color-picker-wrap .icon-btn {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 .hidden-color-input {
   position: absolute;
-  width: 0;
-  height: 0;
-  opacity: 0;
-  pointer-events: none;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.01;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  border-radius: 12px;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .empty-state {
@@ -971,7 +990,8 @@ body.light-mode .over {
     gap: 6px;
   }
 
-  .icon-btn {
+  .icon-btn,
+  .color-picker-wrap {
     width: 42px;
     height: 42px;
     border-radius: 14px;
@@ -1133,7 +1153,12 @@ body.light-mode .over {
     justify-content: space-between;
   }
 
-  .icon-btn {
+  .icon-btn,
+  .color-picker-wrap {
     flex: 1;
+  }
+
+  .color-picker-wrap .icon-btn {
+    width: 100%;
   }
 }
