@@ -50,3 +50,11 @@ Open `index.html` in your browser.
    - Folder: `/root`
 6. Press `Save`.
 7. Wait a minute, then open the GitHub Pages link.
+
+## Mobile optimization
+
+- Desktop layout remains unchanged.
+- On phones, the total timer becomes sticky at the top.
+- A bottom live-control bar appears for Pause, Next, and Summary.
+- Presenter cards become full-width with larger tap targets.
+- Header, controls, and pop-ups are adjusted for smaller screens.

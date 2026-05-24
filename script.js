@@ -70,6 +70,9 @@ const els = {
   cancelEditBtn: document.getElementById("cancelEditBtn"),
   saveEditBtn: document.getElementById("saveEditBtn"),
   editTotalDialog: document.getElementById("editTotalDialog"),
+  mobilePauseTotalBtn: document.getElementById("mobilePauseTotalBtn"),
+  mobileNextSpeakerBtn: document.getElementById("mobileNextSpeakerBtn"),
+  mobileSummaryBtn: document.getElementById("mobileSummaryBtn"),
   editTotalLabel: document.getElementById("editTotalLabel"),
   editTotalMinutes: document.getElementById("editTotalMinutes"),
   editTotalSeconds: document.getElementById("editTotalSeconds"),
@@ -600,12 +603,23 @@ function updateLivePresenterValues() {
   });
 }
 
+
+function renderMobileLiveBar() {
+  if (!els.mobileNextSpeakerBtn) return;
+
+  const isSequence = state.mode === "sequence";
+  els.mobileNextSpeakerBtn.disabled = !isSequence;
+  els.mobileNextSpeakerBtn.textContent = isSequence ? "Next" : "Next";
+  els.mobilePauseTotalBtn.textContent = state.total.running ? "Pause" : "Paused";
+}
+
 function renderAll(forceCards = false) {
   renderTheme();
   renderTotal();
   renderSequenceStatus();
   renderPresenterCards(forceCards);
   updatePresenterDurationLabel();
+  renderMobileLiveBar();
 
   document.body.classList.toggle("sequence-mode", state.mode === "sequence");
   els.modeTabs.forEach(tab => {
@@ -922,6 +936,18 @@ function bindEvents() {
     renderAll(true);
   });
 
+  if (els.mobilePauseTotalBtn) {
+    els.mobilePauseTotalBtn.addEventListener("click", pauseTotalAndPresenters);
+  }
+
+  if (els.mobileNextSpeakerBtn) {
+    els.mobileNextSpeakerBtn.addEventListener("click", nextSpeaker);
+  }
+
+  if (els.mobileSummaryBtn) {
+    els.mobileSummaryBtn.addEventListener("click", showSummary);
+  }
+
   els.modeTabs.forEach(tab => {
     tab.addEventListener("click", () => setMode(tab.dataset.mode));
   });
@@ -1054,6 +1080,7 @@ function startRenderLoop() {
     renderTotal();
     updateLivePresenterValues();
     renderSequenceStatus();
+    renderMobileLiveBar();
   }, 100);
 }
 
