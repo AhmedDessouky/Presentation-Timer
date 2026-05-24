@@ -96,6 +96,12 @@
           <h2>Sequence Setup</h2>
           <label for="sequenceInput">Speaking order</label>
           <textarea id="sequenceInput" placeholder="Write one presenter name per line. You can repeat the same name more than once.&#10;&#10;Example:&#10;Ahmed&#10;Amr&#10;Ahmed&#10;Laila"></textarea>
+
+          <label class="check-row">
+            <input id="autoResetSequence" type="checkbox" />
+            <span>Auto reset presenter timers when a new sequence starts</span>
+          </label>
+
           <div class="button-row">
             <button class="btn full" id="loadSequenceBtn">Load Sequence</button>
             <button class="btn primary full" id="sideNextSpeakerBtn">Next Speaker</button>

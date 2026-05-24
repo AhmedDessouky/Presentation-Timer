@@ -70,3 +70,19 @@ Open `index.html` in your browser.
 ## Latest update
 
 - Fixed light mode contrast for Add Presenter and Next Speaker primary buttons.
+
+## Latest update
+
+- Rolled back the phone color picker to the earlier Safari-friendly version while keeping the desktop version unchanged.
+
+## Latest update
+
+- Selected timer colors are now visible at all times, even when the timer/stopwatch is paused.
+
+## Latest update
+
+- Added a sequence setup option to auto reset presenter timers when a new sequence starts.
+
+## Latest update
+
+- The sequence auto-reset option now resets the total timer as well as all presenter timers.

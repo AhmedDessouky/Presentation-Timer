@@ -4,6 +4,7 @@ const state = {
   mode: "manual",
   theme: "dark",
   soundEnabled: true,
+  autoResetSequence: false,
   presenters: [],
   total: {
     type: "stopwatch",
@@ -47,6 +48,7 @@ const els = {
   pausePresentersBtn: document.getElementById("pausePresentersBtn"),
   clearPresentersBtn: document.getElementById("clearPresentersBtn"),
   sequenceInput: document.getElementById("sequenceInput"),
+  autoResetSequence: document.getElementById("autoResetSequence"),
   loadSequenceBtn: document.getElementById("loadSequenceBtn"),
   sideNextSpeakerBtn: document.getElementById("sideNextSpeakerBtn"),
   mainNextSpeakerBtn: document.getElementById("mainNextSpeakerBtn"),
@@ -398,6 +400,21 @@ function blockSequenceIfDuplicateNames() {
   return true;
 }
 
+
+function resetPresenterTimersForSequence() {
+  state.presenters.forEach(p => {
+    p.elapsedMs = 0;
+    p.running = false;
+    p.lastStartedAt = null;
+    p.alerted = false;
+  });
+
+  state.total.elapsedMs = 0;
+  state.total.running = false;
+  state.total.lastStartedAt = null;
+  state.total.alerted = false;
+}
+
 function loadSequence() {
   if (blockSequenceIfDuplicateNames()) {
     return;
@@ -424,6 +441,11 @@ function loadSequence() {
 
   state.sequence = rawNames;
   state.sequenceIndex = -1;
+
+  if (state.autoResetSequence) {
+    resetPresenterTimersForSequence();
+  }
+
   save();
   renderAll(true);
 }
@@ -440,6 +462,10 @@ function nextSpeaker() {
   if (!state.sequence.length) {
     loadSequence();
     if (!state.sequence.length) return;
+  }
+
+  if (state.sequenceIndex === -1 && state.autoResetSequence) {
+    resetPresenterTimersForSequence();
   }
 
   state.sequenceIndex += 1;
@@ -535,6 +561,7 @@ function renderTotal() {
   if (document.activeElement !== els.totalSeconds) els.totalSeconds.value = split.seconds;
   els.totalType.value = state.total.type;
   els.soundEnabled.checked = state.soundEnabled;
+  if (els.autoResetSequence) els.autoResetSequence.checked = state.autoResetSequence;
 }
 
 function renderSequenceStatus() {
@@ -589,11 +616,13 @@ function renderPresenterCards(force = false) {
       <div class="card-head">
         <h3>${escapeHtml(p.name)}</h3>
         <div class="card-buttons">
-          <button class="icon-btn color" title="Change color" data-action="color" data-id="${p.id}">🎨</button>
+          <span class="color-picker-wrap" title="Change color">
+            <button class="icon-btn color" title="Change color" data-action="color" data-id="${p.id}">🎨</button>
+            <input class="hidden-color-input" type="color" value="${color}" data-color-input="${p.id}" aria-label="Change ${escapeHtml(p.name)} color" />
+          </span>
           <button class="icon-btn edit" title="Edit" data-action="edit" data-id="${p.id}">✎</button>
           <button class="icon-btn" title="Reset" data-action="reset" data-id="${p.id}">↺</button>
           <button class="icon-btn" title="Delete" data-action="delete" data-id="${p.id}">×</button>
-          <input class="hidden-color-input" type="color" value="${color}" data-color-input="${p.id}" />
         </div>
       </div>
 
@@ -875,7 +904,14 @@ function updateColor(id, color) {
   if (!presenter) return;
 
   presenter.color = color;
+
+  const card = document.querySelector(`.timer-card[data-id="${id}"]`);
+  if (card) {
+    card.style.setProperty("--timer-color", color);
+  }
+
   save();
+  lastPresenterSignature = "";
   renderAll(true);
 }
 
@@ -941,6 +977,7 @@ function load() {
     Object.assign(state, parsed);
     state.theme = parsed.theme || "dark";
     state.soundEnabled = parsed.soundEnabled ?? true;
+    state.autoResetSequence = parsed.autoResetSequence ?? false;
     state.editingPresenterId = null;
     state.total = {
       ...state.total,
@@ -1016,6 +1053,13 @@ function bindEvents() {
     save();
   });
 
+  if (els.autoResetSequence) {
+    els.autoResetSequence.addEventListener("change", () => {
+      state.autoResetSequence = els.autoResetSequence.checked;
+      save();
+    });
+  }
+
   els.testSoundBtn.addEventListener("click", playTone);
 
   els.pauseTotalBtn.addEventListener("click", pauseTotalAndPresenters);
@@ -1075,6 +1119,12 @@ function bindEvents() {
   });
 
   els.timerGrid.addEventListener("input", event => {
+    const input = event.target.closest("[data-color-input]");
+    if (!input) return;
+    updateColor(input.dataset.colorInput, input.value);
+  });
+
+  els.timerGrid.addEventListener("change", event => {
     const input = event.target.closest("[data-color-input]");
     if (!input) return;
     updateColor(input.dataset.colorInput, input.value);
